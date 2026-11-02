@@ -1,0 +1,21 @@
+.admin-booking-form { grid-template-columns: 1.15fr 1.15fr .9fr .8fr auto; }
+.price-panel { margin-bottom: 20px; }
+.doctor-price-list { display: grid; gap: 0; }
+.doctor-price-row { display: grid; grid-template-columns: 42px minmax(190px, 1fr) minmax(130px, 180px) auto; align-items: center; gap: 15px; padding: 15px 0; border-bottom: 1px solid var(--line); }
+.doctor-price-row:last-child { border-bottom: 0; }
+.doctor-avatar { display: grid; width: 40px; height: 40px; place-items: center; border-radius: 13px; color: var(--green); background: var(--green-pale); font-size: 12px; font-weight: 800; }
+.doctor-name { display: grid; gap: 5px; }
+.doctor-name strong { font-size: 13px; }
+.doctor-name span { color: var(--text-muted); font-size: 11px; }
+.price-input { display: flex; height: 40px; align-items: center; gap: 5px; padding: 0 10px; border: 1px solid var(--line); border-radius: 9px; color: var(--text-muted); }
+.price-input input { width: 100%; min-width: 0; border: 0; outline: 0; color: var(--text); font: inherit; font-size: 13px; }
+.price-panel .section-title { margin-bottom: 7px; }
+.appointments-panel .table-wrap { margin: 0 -26px -24px; }
+
+@media (max-width: 1100px) { .admin-booking-form { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 700px) {
+  .doctor-price-row { grid-template-columns: 42px 1fr; }
+  .price-input { grid-column: 1 / 2; }
+  .doctor-price-row > .button { grid-column: 2 / 3; }
+  .appointments-panel .table-wrap { margin: 0 -18px -18px; }
+}

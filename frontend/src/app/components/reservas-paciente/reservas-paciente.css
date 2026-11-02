@@ -1,0 +1,10 @@
+.booking-panel, .appointments-panel { margin-bottom: 20px; }
+.booking-form { display: grid; grid-template-columns: 1.25fr .9fr .8fr auto; align-items: end; gap: 14px; padding-top: 6px; }
+.booking-form label { display: grid; gap: 8px; color: var(--text); font-size: 12px; font-weight: 700; }
+.booking-form select, .booking-form input { width: 100%; min-width: 0; height: 45px; padding: 0 12px; border: 1px solid var(--line); border-radius: 9px; outline: none; background: #fff; color: var(--text); font: inherit; font-size: 13px; }
+.booking-form select:focus, .booking-form input:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(40,116,99,.1); }
+.booking-form button { min-height: 45px; white-space: nowrap; }
+.appointments-panel .table-wrap { margin: 0 -26px -24px; }
+
+@media (max-width: 960px) { .booking-form { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 600px) { .booking-form { grid-template-columns: 1fr; } .booking-form button { justify-content: center; } .appointments-panel .table-wrap { margin: 0 -18px -18px; } }

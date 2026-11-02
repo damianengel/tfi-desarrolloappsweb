@@ -1,0 +1,15 @@
+<header class="topbar" *ngIf="usuario">
+  <a class="topbar-brand" routerLink="/">
+    <span class="mini-mark">+</span>
+    <span>Clínica <strong>Oliva</strong><small>ATENCIÓN MÉDICA</small></span>
+  </a>
+  <nav class="topbar-nav" aria-label="Navegación principal">
+    <a *ngIf="usuario.rol === 'PACIENTE'" routerLink="/reservas" routerLinkActive="active">Mis turnos</a>
+    <a *ngIf="usuario.rol === 'MEDICO'" routerLink="/agenda" routerLinkActive="active">Agenda</a>
+    <a *ngIf="usuario.rol === 'ADMINISTRADOR'" routerLink="/admin" routerLinkActive="active">Panel de gestión</a>
+  </nav>
+  <div class="topbar-user">
+    <div class="user-copy"><strong>{{ usuario.nombres }} {{ usuario.apellidos }}</strong><span>{{ rolLabel }}</span></div>
+    <button type="button" class="button button-quiet" (click)="cerrarSesion()">Salir</button>
+  </div>
+</header>

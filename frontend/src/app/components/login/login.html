@@ -1,0 +1,48 @@
+<section class="login-layout">
+  <div class="login-intro">
+    <div class="brand-mark" aria-hidden="true">+</div>
+    <p class="eyebrow">CLÍNICA MÉDICA</p>
+    <h1>Tu salud, con un turno más simple.</h1>
+    <p class="intro-copy">Gestioná consultas y horarios desde un mismo lugar, de forma segura y clara.</p>
+    <div class="intro-note"><span class="status-dot"></span> Atención de lunes a domingo, de 08:00 a 16:00</div>
+  </div>
+
+  <div class="login-card">
+    <p class="eyebrow">BIENVENIDO/A</p>
+    <h2>Ingresar al sistema</h2>
+    <p class="muted">Usá las credenciales asignadas por la clínica.</p>
+
+    <form (ngSubmit)="ingresar()" #formulario="ngForm">
+      <label for="email">Correo electrónico</label>
+      <input
+        id="email"
+        type="email"
+        name="email"
+        [(ngModel)]="email"
+        placeholder="nombre@clinica.com"
+        autocomplete="username"
+        required
+        email
+      />
+
+      <label for="clave">Contraseña</label>
+      <input
+        id="clave"
+        type="password"
+        name="clave"
+        [(ngModel)]="clave"
+        placeholder="Ingresá tu contraseña"
+        autocomplete="current-password"
+        minlength="6"
+        required
+      />
+
+      <div class="alert alert-error" *ngIf="error" role="alert">{{ error }}</div>
+      <button class="button button-primary button-wide" type="submit" [disabled]="formulario.invalid || cargando">
+        {{ cargando ? 'Ingresando…' : 'Ingresar' }}
+        <span aria-hidden="true">→</span>
+      </button>
+    </form>
+    <p class="login-footnote">¿No tenés acceso? Solicitá tus credenciales al administrador.</p>
+  </div>
+</section>

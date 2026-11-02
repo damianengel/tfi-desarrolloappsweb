@@ -1,0 +1,65 @@
+<section class="page-heading">
+  <div>
+    <p class="eyebrow">ÁREA DEL PACIENTE</p>
+    <h1>Mis turnos</h1>
+    <p class="page-subtitle">Reservá una consulta o revisá el estado de tus próximos turnos.</p>
+  </div>
+  <div class="heading-tag"><span class="status-dot"></span> Consultas clínicas</div>
+</section>
+
+<div class="alert alert-error" *ngIf="error" role="alert">{{ error }}</div>
+<div class="alert alert-success" *ngIf="aviso" role="status">{{ aviso }}</div>
+
+<section class="panel booking-panel">
+  <div class="section-title">
+    <div><span class="step-number">01</span><div><h2>Reservar una consulta</h2><p>Elegí profesional, fecha y horario disponible.</p></div></div>
+    <span class="rule-note">Turnos de 1 hora · hasta 30 días</span>
+  </div>
+  <div class="booking-form">
+    <label>Profesional
+      <select name="medico" [(ngModel)]="idMedico" (ngModelChange)="cambiarBusqueda()" required>
+        <option [ngValue]="null" disabled>Seleccioná un médico</option>
+        <option *ngFor="let medico of medicos" [ngValue]="medico.id">Dr. {{ medico.apellidos }}, {{ medico.nombres }}</option>
+      </select>
+    </label>
+    <label>Fecha de consulta
+      <input type="date" name="fecha" [(ngModel)]="fecha" [min]="fechaMin" [max]="fechaMax" (ngModelChange)="cambiarBusqueda()" />
+    </label>
+    <label>Horario disponible
+      <select name="horario" [(ngModel)]="fechaHoraSeleccionada" [disabled]="!horarios.length" required>
+        <option value="" disabled>{{ horarios.length ? 'Seleccioná un horario' : 'No hay horarios disponibles' }}</option>
+        <option *ngFor="let horario of horarios" [value]="horario.fecha_hora">{{ horario.hora_local }} hs</option>
+      </select>
+    </label>
+    <button class="button button-primary" type="button" (click)="reservar()" [disabled]="!fechaHoraSeleccionada || reservando">
+      {{ reservando ? 'Reservando…' : 'Confirmar turno' }} <span aria-hidden="true">→</span>
+    </button>
+  </div>
+</section>
+
+<section class="panel appointments-panel">
+  <div class="section-title">
+    <div><span class="step-number">02</span><div><h2>Historial de turnos</h2><p>Incluye turnos activos, cancelados y ya realizados.</p></div></div>
+    <span class="count-pill">{{ reservas.length }} {{ reservas.length === 1 ? 'turno' : 'turnos' }}</span>
+  </div>
+
+  <div class="empty-state" *ngIf="!cargando && reservas.length === 0">
+    <span class="empty-icon">◷</span><strong>Todavía no tenés turnos</strong>
+    <span>Cuando reserves una consulta, la vas a ver acá.</span>
+  </div>
+
+  <div class="table-wrap" *ngIf="reservas.length">
+    <table class="data-table">
+      <thead><tr><th>Fecha y hora</th><th>Profesional</th><th>Valor congelado</th><th>Estado</th><th></th></tr></thead>
+      <tbody>
+        <tr *ngFor="let reserva of reservas">
+          <td><strong>{{ formatoFecha(reserva.fecha_hora) }}</strong><span class="table-secondary">{{ formatoHora(reserva.fecha_hora) }} hs</span></td>
+          <td>Dr. {{ reserva.medico.apellidos }}, {{ reserva.medico.nombres }}</td>
+          <td>{{ formatoPrecio(reserva.valor_consulta) }}</td>
+          <td><span class="badge" [ngClass]="'badge-' + reserva.estado.toLowerCase()">{{ estadoLabel(reserva.estado) }}</span></td>
+          <td class="actions-cell"><button *ngIf="puedeCancelar(reserva)" type="button" class="button button-outline-danger" (click)="cancelar(reserva)" [disabled]="cancelandoId === reserva.id">{{ cancelandoId === reserva.id ? 'Cancelando…' : 'Cancelar' }}</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>

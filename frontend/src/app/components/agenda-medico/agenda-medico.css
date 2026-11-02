@@ -1,0 +1,21 @@
+.date-picker-card { display: grid; gap: 7px; padding: 12px 14px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); }
+.date-picker-card label { color: var(--text-muted); font-size: 10px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+.date-picker-card input { border: 0; outline: 0; background: transparent; color: var(--text); font: inherit; font-size: 13px; font-weight: 700; }
+.agenda-panel { min-height: 360px; }
+.agenda-list { display: grid; gap: 0; }
+.agenda-item { display: grid; grid-template-columns: 82px minmax(220px, 1fr) minmax(150px, .6fr) auto; align-items: center; gap: 20px; min-height: 88px; padding: 14px 0; border-bottom: 1px solid var(--line); }
+.agenda-item:last-child { border-bottom: 0; }
+.agenda-time { display: grid; gap: 5px; color: var(--green); }
+.agenda-time strong { font-family: Georgia, serif; font-size: 22px; font-weight: 400; }
+.agenda-time span, .agenda-patient > div:last-child span { color: var(--text-muted); font-size: 11px; }
+.agenda-patient { display: flex; align-items: center; gap: 12px; }
+.patient-avatar { display: grid; width: 40px; height: 40px; flex: 0 0 40px; place-items: center; border-radius: 50%; color: var(--green); background: var(--green-pale); font-size: 12px; font-weight: 800; }
+.agenda-patient > div:last-child { display: grid; gap: 5px; }
+.agenda-patient strong { font-size: 13px; }
+.agenda-status { display: grid; justify-items: start; gap: 7px; }
+.waiting-note { color: var(--text-muted); font-size: 10px; }
+.agenda-actions { display: flex; gap: 7px; }
+.agenda-actions .button { padding: 9px 12px; font-size: 11px; }
+
+@media (max-width: 900px) { .agenda-item { grid-template-columns: 70px 1fr auto; } .agenda-status { grid-column: 2; } .agenda-actions { grid-column: 3; grid-row: 1 / span 2; flex-direction: column; } }
+@media (max-width: 600px) { .page-heading { align-items: flex-start; flex-direction: column; } .agenda-item { grid-template-columns: 60px 1fr; gap: 12px; } .agenda-patient { min-width: 0; } .agenda-actions { grid-column: 2; grid-row: auto; flex-direction: row; } .agenda-status { grid-column: 2; } }

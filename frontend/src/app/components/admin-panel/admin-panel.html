@@ -1,0 +1,82 @@
+<section class="page-heading">
+  <div>
+    <p class="eyebrow">GESTIÓN DE LA CLÍNICA</p>
+    <h1>Panel de administración</h1>
+    <p class="page-subtitle">Administrá reservas, pacientes y valores de consulta.</p>
+  </div>
+  <div class="heading-tag">{{ reservas.length }} reservas registradas</div>
+</section>
+
+<div class="alert alert-error" *ngIf="error" role="alert">{{ error }}</div>
+<div class="alert alert-success" *ngIf="aviso" role="status">{{ aviso }}</div>
+
+<section class="panel booking-panel">
+  <div class="section-title">
+    <div><span class="step-number">01</span><div><h2>Reservar un turno</h2><p>La reserva conserva el precio vigente del médico al confirmarse.</p></div></div>
+    <span class="rule-note">Horario: 08:00 a 16:00 · turnos de 1 hora</span>
+  </div>
+  <div class="booking-form admin-booking-form">
+    <label>Paciente
+      <select name="paciente" [(ngModel)]="idPaciente" required>
+        <option [ngValue]="null" disabled>Seleccioná un paciente</option>
+        <option *ngFor="let paciente of pacientes" [ngValue]="paciente.id">{{ paciente.apellidos }}, {{ paciente.nombres }} · #{{ paciente.id }}</option>
+      </select>
+    </label>
+    <label>Profesional
+      <select name="medico" [(ngModel)]="idMedico" (ngModelChange)="cambiarBusqueda()" required>
+        <option [ngValue]="null" disabled>Seleccioná un médico</option>
+        <option *ngFor="let medico of medicos" [ngValue]="medico.id">Dr. {{ medico.apellidos }}, {{ medico.nombres }}</option>
+      </select>
+    </label>
+    <label>Fecha de consulta
+      <input type="date" name="fecha" [(ngModel)]="fecha" [min]="fechaMin" [max]="fechaMax" (ngModelChange)="cambiarBusqueda()" />
+    </label>
+    <label>Horario disponible
+      <select name="horario" [(ngModel)]="fechaHoraSeleccionada" [disabled]="!horarios.length" required>
+        <option value="" disabled>{{ horarios.length ? 'Seleccioná un horario' : 'No hay horarios libres' }}</option>
+        <option *ngFor="let horario of horarios" [value]="horario.fecha_hora">{{ horario.hora_local }} hs</option>
+      </select>
+    </label>
+    <button class="button button-primary" type="button" (click)="reservar()" [disabled]="!idPaciente || !fechaHoraSeleccionada || reservando">
+      {{ reservando ? 'Reservando…' : 'Reservar turno' }} <span aria-hidden="true">→</span>
+    </button>
+  </div>
+</section>
+
+<section class="panel price-panel">
+  <div class="section-title">
+    <div><span class="step-number">02</span><div><h2>Valores de consulta</h2><p>Los nuevos valores aplican únicamente a reservas futuras.</p></div></div>
+  </div>
+  <div class="doctor-price-list">
+    <div class="doctor-price-row" *ngFor="let medico of medicos">
+      <div class="doctor-avatar">{{ medico.nombres.charAt(0) }}{{ medico.apellidos.charAt(0) }}</div>
+      <div class="doctor-name"><strong>Dr. {{ medico.apellidos }}, {{ medico.nombres }}</strong><span>Matrícula {{ medico.matricula }} · Actual: {{ formatoPrecio(medico.valor_consulta) }}</span></div>
+      <label class="price-input"><span class="sr-only">Nuevo valor para Dr. {{ medico.apellidos }}</span><span>$</span><input type="number" min="1" step="1" [name]="'valor-' + medico.id" [(ngModel)]="valoresConsulta[medico.id]" /></label>
+      <button type="button" class="button button-secondary" (click)="actualizarValor(medico)" [disabled]="actualizandoMedicoId === medico.id">{{ actualizandoMedicoId === medico.id ? 'Guardando…' : 'Guardar valor' }}</button>
+    </div>
+    <div class="empty-state compact" *ngIf="!medicos.length"><span>No hay médicos activos.</span></div>
+  </div>
+</section>
+
+<section class="panel appointments-panel">
+  <div class="section-title">
+    <div><span class="step-number">03</span><div><h2>Reservas de la clínica</h2><p>Listado general para consulta y cancelación administrativa.</p></div></div>
+    <span class="count-pill">{{ reservas.length }} {{ reservas.length === 1 ? 'turno' : 'turnos' }}</span>
+  </div>
+  <div class="empty-state" *ngIf="!cargando && reservas.length === 0"><span class="empty-icon">◷</span><strong>No hay reservas</strong><span>Las reservas confirmadas aparecerán acá.</span></div>
+  <div class="table-wrap" *ngIf="reservas.length">
+    <table class="data-table">
+      <thead><tr><th>Fecha y hora</th><th>Paciente</th><th>Profesional</th><th>Valor</th><th>Estado</th><th></th></tr></thead>
+      <tbody>
+        <tr *ngFor="let reserva of reservas">
+          <td><strong>{{ formatoFecha(reserva.fecha_hora) }}</strong><span class="table-secondary">{{ formatoHora(reserva.fecha_hora) }} hs</span></td>
+          <td>{{ reserva.paciente.apellidos }}, {{ reserva.paciente.nombres }}</td>
+          <td>Dr. {{ reserva.medico.apellidos }}, {{ reserva.medico.nombres }}</td>
+          <td>{{ formatoPrecio(reserva.valor_consulta) }}</td>
+          <td><span class="badge" [ngClass]="'badge-' + reserva.estado.toLowerCase()">{{ estadoLabel(reserva.estado) }}</span></td>
+          <td class="actions-cell"><button *ngIf="puedeCancelar(reserva)" type="button" class="button button-outline-danger" (click)="cancelar(reserva)" [disabled]="cancelandoId === reserva.id">{{ cancelandoId === reserva.id ? 'Cancelando…' : 'Cancelar' }}</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>

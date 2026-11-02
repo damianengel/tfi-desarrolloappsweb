@@ -1,0 +1,32 @@
+<section class="page-heading">
+  <div>
+    <p class="eyebrow">ÁREA PROFESIONAL</p>
+    <h1>Agenda médica</h1>
+    <p class="page-subtitle">Consultá los turnos reservados y actualizá su estado.</p>
+  </div>
+  <div class="date-picker-card"><label for="agenda-fecha">Fecha de atención</label><input id="agenda-fecha" type="date" name="fecha" [(ngModel)]="fecha" (ngModelChange)="cargarAgenda()" /></div>
+</section>
+
+<div class="alert alert-error" *ngIf="error" role="alert">{{ error }}</div>
+<div class="alert alert-success" *ngIf="aviso" role="status">{{ aviso }}</div>
+
+<section class="panel agenda-panel">
+  <div class="section-title">
+    <div><span class="step-number">{{ reservas.length.toString().padStart(2, '0') }}</span><div><h2>Turnos del día</h2><p>Horario de atención: 08:00 a 16:00 · duración: 1 hora.</p></div></div>
+    <span class="count-pill">{{ reservas.length }} {{ reservas.length === 1 ? 'consulta' : 'consultas' }}</span>
+  </div>
+
+  <div class="empty-state" *ngIf="!cargando && reservas.length === 0"><span class="empty-icon">◷</span><strong>Agenda libre</strong><span>No hay turnos reservados para esta fecha.</span></div>
+
+  <div class="agenda-list" *ngIf="reservas.length">
+    <article class="agenda-item" *ngFor="let reserva of reservas">
+      <div class="agenda-time"><strong>{{ formatoHora(reserva.fecha_hora) }}</strong><span>60 min</span></div>
+      <div class="agenda-patient"><div class="patient-avatar">{{ reserva.paciente.nombres.charAt(0) }}{{ reserva.paciente.apellidos.charAt(0) }}</div><div><strong>{{ reserva.paciente.apellidos }}, {{ reserva.paciente.nombres }}</strong><span>Consulta clínica · turno #{{ reserva.id }}</span></div></div>
+      <div class="agenda-status"><span class="badge" [ngClass]="'badge-' + reserva.estado.toLowerCase()">{{ estadoLabel(reserva.estado) }}</span><span class="waiting-note" *ngIf="reserva.estado === 'ACTIVO' && !puedeMarcar(reserva)">Disponible al inicio de la consulta</span></div>
+      <div class="agenda-actions" *ngIf="puedeMarcar(reserva)">
+        <button type="button" class="button button-success" (click)="marcar(reserva, EstadosReservas.ATENDIDO)" [disabled]="actualizandoId === reserva.id">Atendido</button>
+        <button type="button" class="button button-outline-danger" (click)="marcar(reserva, EstadosReservas.AUSENTE)" [disabled]="actualizandoId === reserva.id">Ausente</button>
+      </div>
+    </article>
+  </div>
+</section>
