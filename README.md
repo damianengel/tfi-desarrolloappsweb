@@ -116,7 +116,3 @@ docker compose exec api pm2 status
 docker compose exec web nginx -v
 docker compose logs api
 ```
-
-## Entrega académica pendiente
-
-El PDF también pide un grupo de 5–6 estudiantes y un video de 8–12 minutos en el que **cada integrante**, con cámara y micrófono, se presente y manipule el sistema explicando su contribución. La carpeta ZIP debe contener el código fuente y el enlace al video. El video, los nombres del grupo, el enlace y la creación/subida del ZIP son pasos que el grupo debe completar fuera de esta aplicación.
