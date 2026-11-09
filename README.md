@@ -116,3 +116,9 @@ docker compose exec api pm2 status
 docker compose exec web nginx -v
 docker compose logs api
 ```
+## Link al video en youtube:
+
+**https://youtu.be/PUY6bJA7_1g**.
+
+
+
